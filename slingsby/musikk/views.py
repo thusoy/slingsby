@@ -1,6 +1,7 @@
 # coding: utf-8
 
 from ..general import make_title, cache, time
+from ..general.mail import MailMessage
 from ..general.views import ActionView
 from .models import Song, SongSuggestionForm, ReadySongForm, Vote
 from .tasks import process_new_song, count_votes
@@ -16,6 +17,7 @@ from time import time as get_timestamp
 import json
 import logging
 import requests
+import textwrap
 
 _SONGS_IN_TOP_SONGS = 36
 _EXPONENTIAL_BASE = 0.9917
@@ -126,9 +128,36 @@ class AllSongsView(TemplateView):
             song = form.save(commit=False)
             song.suggested_by = request.user
             song.save()
+<<<<<<< HEAD
             messages.success(request, 'Takker og bukker, webmaster vil se på forslaget og ' \
                 'prøve å få lastet det opp ASAP, hang tight!')
             return HttpResponseRedirect(reverse('musikk'))
+=======
+            context['new_songforms'].append(ReadySongForm(instance=song))
+            context['feedback'] = 'Takker og bukker, webmaster vil se på forslaget og ' \
+                'prøve å få lastet det opp ASAP, hang tight!'
+            mail = MailMessage(
+                to='tarjei@roms.no',
+                subject='Nytt sangforslag: %s' % song,
+                body=textwrap.dedent("""
+                Hei,
+
+                En ny sang har blitt foreslått på ntnuita.no.
+
+                Tittel: %(title)s
+                Artist: %(artist)s
+                Foreslått av: %(user)s
+
+                Gå inn på ntnuita.no/musikk for å laste opp en sang.
+
+                Ha en fortsatt strålende dag!
+                --
+                ntnuita.no
+                """)
+            )
+            mail.send()
+            return self.render_to_response(context, status=201)
+>>>>>>> Send mail on new song suggestions.
         else:
             messages.warning(request, 'Oops, ser ut til at du har noen feil i skjemaet, ' \
                 'se om du får fikset det og prøv på nytt!')
