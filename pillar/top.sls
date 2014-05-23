@@ -1,5 +1,6 @@
 base:
  '*':
+  - env
   - secure
   - users
 
