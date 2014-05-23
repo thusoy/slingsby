@@ -3,6 +3,7 @@ core-packages:
     - order: 1
     - pkgs:
       - curl
+      - git
       - vim
       - wget
 
