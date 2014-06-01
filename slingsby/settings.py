@@ -27,8 +27,8 @@ DATABASES = {
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': 'unix:/tmp/memcached.socket',
+        'BACKEND': 'caching.backends.locmem.LocMemCache',
+        'LOCATION': 'slingsby',
     }
 }
 

@@ -23,6 +23,13 @@ DATABASES = {
     },
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'caching.backends.memcached.MemcachedCache',
+        'LOCATION': 'unix:/tmp/memcached.socket',
+    }
+}
+
 STATIC_URL = '/static/'
 
 FILESERVER = "{{ slingsby.get('fileserver', 'tarjeikl@login.stud.ntnu.no') }}"
