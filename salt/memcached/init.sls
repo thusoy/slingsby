@@ -5,6 +5,8 @@ memcached:
   file.managed:
     - name: /etc/memcached.conf
     - source: salt://memcached/memcached.conf
+    - require:
+      - pkg: memcached
 
   service.running:
     - require:
