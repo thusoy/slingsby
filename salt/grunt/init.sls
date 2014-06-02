@@ -11,3 +11,6 @@ grunt-cli:
   npm.installed:
     - require:
       - pkg: nodejs
+
+compass:
+  gem.installed
