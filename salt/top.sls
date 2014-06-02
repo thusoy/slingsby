@@ -16,3 +16,4 @@ base:
 
   'vagrant':
     - grunt
+    - mysql.server
