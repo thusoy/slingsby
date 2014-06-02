@@ -14,18 +14,24 @@ mysql-server:
     - require:
       - pkg: mysql-deps
 
+  service.running:
+    - name: mysql
+    - require:
+      - file: mysql-deps
+      - pkg: mysql-server
+
 
 slingsby-db:
   mysql_database.present:
     - name: slingsby_rel
     - require:
-      - pkg: mysql-server
+      - service: mysql-server
 
   mysql_user.present:
     - name: slingsby
     - password: "{{ pillar['MYSQL_PASSWORD'] }}"
     - require:
-      - pkg: mysql-server
+      - service: mysql-server
 
   mysql_grants.present:
     - grant: all
