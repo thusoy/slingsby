@@ -25,6 +25,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder "salt", "/srv/salt/"
   config.vm.synced_folder "pillar", "/srv/pillar"
 
+  # Increase available ram a notch
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "1024"]
+  end
+
   ## Use all the defaults:
   config.vm.provision :salt do |salt|
 
