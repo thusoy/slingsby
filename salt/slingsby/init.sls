@@ -32,6 +32,7 @@ slingsby:
     {% else %}
     - name: https://github.com/TelemarkAlpint/slingsby
     {% endif %}
+    - bin_env: /srv/ntnuita.no/venv
     - upgrade: True
     - require:
       - virtualenv: slingsby
@@ -53,6 +54,8 @@ slingsby_uwsgi_conf:
     - name: /srv/ntnuita.no/uwsgi.ini
     - source: salt://slingsby/uwsgi_conf
     - mode: 444
+    - require:
+      - virtualenv: slingsby
 
 
 slingsby_log_dir:
