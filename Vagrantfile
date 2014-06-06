@@ -28,7 +28,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Increase available ram a notch
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--memory", "1024"]
+    vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/vagrant", "1"]
   end
+
+  # Allow symlinking into shared folders (needed for npm install to work)
 
   ## Use all the defaults:
   config.vm.provision :salt do |salt|
