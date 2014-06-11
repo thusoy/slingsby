@@ -15,5 +15,4 @@ base:
     - ssh
 
   'vagrant':
-    - grunt
     - mysql.server
