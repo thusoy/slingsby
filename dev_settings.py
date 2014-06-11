@@ -59,6 +59,5 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 ALLOWED_HOSTS = (
     'localhost',
-    'ntnuita.no',
     'ntnuita.local',
 )
