@@ -1,6 +1,5 @@
 base:
   '*':
-    - env
     - secure
     - slingsby
     - users
