@@ -1,31 +1,27 @@
 The production server configuration
 ===================================
 
-We want to treat our servers like cattle, not pets [1]. The effect of this, is that you should hopefully
-never have to ssh to the servers to fix anything, if it's dead you kill it and fire up a new one.
+We have a Raspberry Pi 2 that runs our website in production. If something's borked, repeat the following steps to configure it from scratch.
 
-We have an AMI with all users and salt-minion installed, so if anything happens, fire up one of those instances, run salt, and re-associate the elastic IP to point to the new server.
+- Download the latest Raspbian image and get it onto the SD card.
 
-The AMI was created from a Ubuntu Server 12.04 LTS AMI, after having performed these steps:
+- Boot the pi, expand filesystem, restart.
 
-- ssh in to the box with the master key (located in dropbox accounts db) and the 'ubuntu' user
+- Login using the username `pi` and password `raspberry`.
 
-- do the most elementary upgrades, so that salt doesnt have to work that hard
+- Install the salt-minion:
 
-    $ sudo apt-get update
-    $ sudo apt-get upgrade -y
+    $ curl -L http://bootstrap.saltstack.org | sudo sh -s -- -U 
 
-- Install latest salt-minion:
+- Add the following minion config to `/etc/salt/minion` (beware not to include any leading whitespace):
 
-    $ curl -L http://bootstrap.saltstack.org | sudo sh -s -- git develop
-
-- Add a minion config to `/etc/salt/minion`:
-
+    $ sudo sh -c "cat > /etc/salt/minion <<EOF
     id: ntnuita.no
     file_client: local
     grains:
       roles:
         - web
+    EOF"
 
 - On your local machine, tar the salt and the pillar directories and scp it to the server:
     
@@ -37,10 +33,7 @@ Done. Save the result as an AMI, and use that AMI the next time (done from the w
 
 # Fileserver
 
-Travis automatically deploys static files to the fileserver. The fileserver is a studorg server at NTNU, so Travis needs to be able
-to log in to the server using it's pubkey. The users Travis will use can be seen from the .travis.yml file, look in the start of
-the file to see which user is associated with the ssh alias `slingsby_fileserver`. To make sure Travis can authorize as this users,
-copy Travis' pubkey (get it from pillar/users/init.sls) into the users `~/.ssh/authorized_keys`. Note that the user must have access
+Travis automatically deploys static files to the fileserver, and thus needs to be able to log into the server using public key authentication. The fileserver is a studorg server at NTNU, so Travis essentially needs to be able to log in as a student. The user Travis will use can be seen from the .travis.yml file, look in the start of the file to see which user is associated with the ssh alias `slingsby_fileserver`. To make sure Travis can authorize as this user, copy Travis' pubkey (get it from pillar/users/init.sls) into the users `~/.ssh/authorized_keys`. Note that the user must have access
 to `/home/groupswww/telemark`, which can be provided by an existing user at `http://www.stud.ntnu.no/kundesenter/`.
 
 The reason we use an external fileserver instead of hosting them ourselves using S3 + CloudFront (or directly from Nginx on the server),
@@ -75,5 +68,3 @@ Just to keep it down somewhere, for creating a new DB instance, you fire it up, 
     # Gives access to the slingsby user on the private VPC only
     CREATE USER 'slingsby'@'172.31.0.0/255.255.0.0' IDENTIFIED BY '<slingsby_pw as encrypted in .travis.yml>';
     GRANT ALL ON slingsby_rel.* TO 'slingsby'@'172.31.0.0/255.255.0.0';
-
-[1]: http://www.theregister.co.uk/2013/03/18/servers_pets_or_cattle_cern/
