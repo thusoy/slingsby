@@ -17,7 +17,7 @@ beautifulsoup4==4.3.2
 requests==2.3.0
 # fabric needs paramiko < 1.13 on py2.x
 paramiko==1.12.0
-python-social-auth==0.1.24
+python-social-auth==0.2.4
 
 # Python-social-auth dependencies:
 oauthlib==0.6.1

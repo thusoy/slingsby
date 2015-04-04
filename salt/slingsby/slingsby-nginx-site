@@ -37,10 +37,9 @@ server {
     uwsgi_param X-Forwarded-Proto $http_x_forwarded_proto;
   }
 
-  location ~ ^/(login|complete|admin) {
-    # Identical as the location above, but without the redirect, since the social auth app
-    # requires trailing slashes. An issue has been filed for social auth:
-    # https://github.com/omab/python-social-auth/issues/505
+  location /admin {
+    # Identical as the location above, but without the redirect, since the django admin
+    # requires trailing slashes.
     include uwsgi_params;
     uwsgi_pass slingsby;
     uwsgi_param Host $host;
