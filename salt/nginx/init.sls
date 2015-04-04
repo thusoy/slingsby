@@ -32,6 +32,15 @@ nginx:
     - shell: /usr/sbin/nologin
     - home: /nonexistent
 
+
+nginx-uwsgi-params:
+  file.managed:
+    - name: /etc/nginx/uwsgi_params
+    - source: salt://nginx/uwsgi_params
+    - require:
+      - pkg: nginx
+
+
 # Make sure nginx log dir has correct users and permissions
 nginx-log-dir:
   file.directory:
