@@ -14,7 +14,6 @@ server {
 }
 
 server {
-
   listen 80;
   server_name {{ bind_url }};
   charset utf-8;
@@ -44,20 +43,4 @@ server {
     access_log off;
     add_header Cache-Control "public";
   }
-
-  {% if grains['id'] == 'vagrant' %}
-  location /media {
-    alias /srv/ntnuita.no/media/;
-  }
-  {% endif %}
-
-  # Restrict access to the tasks, so that they can only be accessed locally
-  location ~ ^/tasks {
-    allow 127.0.0.1;
-    deny all;
-
-    include uwsgi_params;
-    uwsgi_pass slingsby;
-  }
-
 }
